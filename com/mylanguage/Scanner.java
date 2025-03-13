@@ -23,7 +23,7 @@ class Scanner {
             advance();
             scanToken();
         }
-        tokens.add(new Token(EOF,"",null,line));
+        tokens.add(new Token(EOF,"",null,this.line));
         return tokens;
     }
 
@@ -74,11 +74,12 @@ class Scanner {
             case '\r': break;
             case '\t': break;
             case '\n':
-                line++;
+                this.line++;
                 break;
+            case '"': string(); break;
 
             default:
-                Hapi.error(line,"Unexpected character.");
+                Hapi.error(this.line,"Unexpected character.");
         }
     }
 
@@ -102,6 +103,22 @@ class Scanner {
     private char peek(){
         if(isAtEnd()) return '\0'; // null character
         return this.source.charAt(this.current);
+    }
+
+    private void string(){
+        while(peek() != '"' && !isAtEnd()){
+            if (peek() == '\n') this.line++;
+            advance();
+        }
+        if(isAtEnd()){
+            Hapi.error(line, "Unterminated string.");
+            return;
+        }
+        // closing ".
+        advance();
+        // Trim the surrounding quotes.
+        String value = source.substring(start + 1, current - 1);
+        addToken(STRING, value);
     }
 
 }
