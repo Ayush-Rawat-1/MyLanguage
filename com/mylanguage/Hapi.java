@@ -32,7 +32,7 @@ public class Hapi {
         if(args.length == 1){
             runFile(args[0]);
         }else{
-            System.err.println("Use jhapi script");
+            System.err.println("Use jhapi file_name.hapi");
             System.exit(64);
         }
     }
