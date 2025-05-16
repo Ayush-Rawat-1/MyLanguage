@@ -1,5 +1,6 @@
 package com.mylanguage;
 
+import java.beans.Expression;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -15,7 +16,7 @@ public class Hapi {
     private static final Interpreter interpreter = new Interpreter();
     public static void main(String[] args) throws IOException {
         if (args.length > 1) {
-            System.out.println("Usage: jail [script]");
+            System.out.println("Usage: Hapi [script]");
             System.exit(64);     
         }
         else if (args.length == 1) {
@@ -37,7 +38,7 @@ public class Hapi {
 
     //To reun the code from command Line
     private static void runPrompt() throws IOException {
-        System.out.println("!!!!!Welcome TO jail");
+        System.out.println("!!!!!Welcome TO Hapi");
         InputStreamReader input = new InputStreamReader(System.in);
         BufferedReader reader = new BufferedReader(input);
         for (;;) {
@@ -53,12 +54,12 @@ public class Hapi {
         Scanner scanner = new Scanner(source);
         List<Token> tokens = scanner.scanTokens();
         Parser parser = new Parser(tokens);
-        Expr expression = parser.parse();
-        System.out.println(tokens);
-        System.out.println(new AstPrinter().print(expression));
+        List<Stmt> statements = parser.parse();
+        // System.out.println(tokens);
+        // System.out.println(new AstPrinter().print(expression));
         // Stop if there was a syntax error.
         if (errorOccured) return;
-        interpreter.interpret(expression);
+        interpreter.interpret(statements);
     }
     static void runtimeError(RuntimeError error) {
         System.err.println(error.getMessage() +

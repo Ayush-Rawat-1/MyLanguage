@@ -1,12 +1,15 @@
 package com.mylanguage;
 
+import com.mylanguage.Expr.Variable;
+
 public class AstPrinter implements Expr.Visitor<String> {
     String print(Expr expr) {
         return expr.accept(this);
     }
     @Override
     public String visitBinaryExpr(Expr.Binary expr) {
-        return parenthesize(expr.operator.lexeme,expr.left, expr.right);
+        return parenthesize(expr.operator.lexeme,
+        expr.left, expr.right);
     }
     @Override
     public String visitGroupingExpr(Expr.Grouping expr) {
@@ -41,5 +44,10 @@ public class AstPrinter implements Expr.Visitor<String> {
         new Expr.Grouping(
         new Expr.Literal(45.67)));
         System.out.println(new AstPrinter().print(expression));
+    }
+    @Override
+    public String visitVariableExpr(Variable expr) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'visitVariableExpr'");
     }
 }

@@ -1,12 +1,28 @@
 package com.mylanguage;
 
+import java.util.List;
+
 import com.mylanguage.Expr.Binary;
 import com.mylanguage.Expr.Grouping;
 import com.mylanguage.Expr.Literal;
 import com.mylanguage.Expr.Unary;
 
-public class Interpreter implements Expr.Visitor<Object>{
-
+public class Interpreter implements Expr.Visitor<Object>, Stmt.Visitor<Void>{
+    private Environment environment = new Environment();
+    
+    @Override
+    public Void visitVarStmt(Stmt.Var stmt) {
+        Object value = null;
+        if (stmt.initializer != null) {
+            value = evaluate(stmt.initializer);
+        }
+        environment.define(stmt.name.lexeme, value);
+        return null;
+    }
+    @Override
+    public Object visitVariableExpr(Expr.Variable expr) {
+        return environment.get(expr.name);
+    }
     @Override
     public Object visitBinaryExpr(Binary expr) {
         Object left = evaluate(expr.left);
@@ -95,15 +111,32 @@ public class Interpreter implements Expr.Visitor<Object>{
         if (object instanceof Boolean) return (boolean)object;
         return true;
     }
+
+    @Override
+    public Void visitExpressionStmt(Stmt.Expression stmt) {
+        evaluate(stmt.expression);
+        return null;
+    }
+
+    @Override
+    public Void visitPrintStmt(Stmt.Print stmt) {
+        Object value = evaluate(stmt.expression);
+        System.out.println(stringify(value));
+        return null;
+    }
     
-    void interpret(Expr expression) { 
+    void interpret(List<Stmt> statements) {
         try {
-            Object value = evaluate(expression);
-            System.out.println(stringify(value));
-        }
+            for (Stmt statement : statements) {
+            execute(statement);
+            }
+        } 
         catch (RuntimeError error) {
             Hapi.runtimeError(error);
-        } 
+        }
+    }
+    private void execute(Stmt stmt) {
+        stmt.accept(this);
     }
     private String stringify(Object object) {
         if (object == null) return "nil";
