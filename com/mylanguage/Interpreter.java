@@ -60,12 +60,6 @@ public class Interpreter implements Expr.Visitor<Object>, Stmt.Visitor<Void>{
         }
     }
     @Override
-    public Object visitAssignExpr(Expr.Assign expr){
-        Object value = evaluate(expr);
-        environment.assign(expr.name,value);
-        return value;
-    }
-    @Override
     public Void visitIfStmt(Stmt.If stmt) {
         if (isTruthy(evaluate(stmt.condition))) {
             execute(stmt.thenBranch);
@@ -74,7 +68,19 @@ public class Interpreter implements Expr.Visitor<Object>, Stmt.Visitor<Void>{
             execute(stmt.elseBranch);
         }
         return null;
-  }
+    }
+    public Void visitWhileStmt(Stmt.While stmt){
+        while(isTruthy(evaluate(stmt.condition))){
+            execute(stmt.body);
+        }
+        return null;
+    }
+    @Override
+    public Object visitAssignExpr(Expr.Assign expr){
+        Object value = evaluate(expr.value);
+        environment.assign(expr.name,value);
+        return value;
+    }
     @Override
     public Object visitVariableExpr(Expr.Variable expr) {
         return environment.get(expr.name);
