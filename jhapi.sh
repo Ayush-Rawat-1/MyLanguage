@@ -1,2 +1,2 @@
 #!/bin/bash
-java -cp "/e/MyLanguage" com.mylanguage.Hapi "$@"
+java com.mylanguage.Hapi "$@"

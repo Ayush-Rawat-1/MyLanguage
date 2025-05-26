@@ -1,7 +1,3 @@
-var x = 20;
-if (x == 20){
-    print "yes";
-} else {
-    print "no";
-}
-print "hello";
+var x y=9+2*3;
+var y=15;
+print x+y;

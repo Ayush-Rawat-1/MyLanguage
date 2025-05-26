@@ -18,7 +18,7 @@ public class Hapi {
             System.exit(64);     
         }
         else if (args.length == 1) {
-            runFile(args[0]);    
+            runFile(args[0]);
         }
         else {
             runPrompt();
@@ -34,7 +34,7 @@ public class Hapi {
         if(runtimeError) System.exit(70);
     }
 
-    //To reun the code from command Line
+    //To run the code from command Line
     private static void runPrompt() throws IOException {
         System.out.println("!!!!!Welcome TO Hapi");
         InputStreamReader input = new InputStreamReader(System.in);
@@ -67,6 +67,8 @@ public class Hapi {
     static void error(int line, String message) {
         report(line, "", message);
     }
+
+
     private static void report(int line, String where,String message) {
         System.err.println(
         "[line " + line + "] Error" + where + ": " + message);

@@ -1,2 +1,2 @@
 @echo off
-java -cp "E:\MyLanguage" com.mylanguage.Hapi %*
+java com.mylanguage.Hapi %*
